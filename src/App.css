@@ -27,11 +27,13 @@ button:active {
 }
 
 #add-note-btn {
-  color: #2353ff;
+  color: rgb(0, 185, 0);
+  font-size: 2vw;
+  margin-top: 8px;
 }
 
 #add-note-btn:hover {
-  color: #1d41c4;
+  color: rgb(1, 150, 1);
 }
 
 #title {
@@ -50,6 +52,7 @@ button:active {
 
 .date {
   margin-left: 1vw;
+  font-size: 1vw;
 }
 
 .notepad-wrapper {

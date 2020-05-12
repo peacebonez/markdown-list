@@ -4,11 +4,6 @@ import Notepad from "./Notepad";
 import "./App.css";
 import { FaPlusSquare } from "react-icons/fa";
 
-let id = 0;
-const idGen = () => {
-  return id++;
-};
-
 const dateNow = new Date().toString();
 
 const initNotes = [
@@ -18,17 +13,31 @@ const initNotes = [
     text: "",
   },
 ];
+//generates a random id
+const idGen = () => {
+  return Math.round(Math.random() * 99999);
+};
 
 function App() {
   const [notes, setNotes] = useState(initNotes);
+  const localNotes = JSON.parse(localStorage.getItem("savedNotes")) || false;
 
   const addNote = () => {
-    setNotes([...notes, { id: idGen(), date: dateNow, text: "" }]);
+    setNotes(() => [...notes, { id: idGen(), date: dateNow, text: "" }]);
+    localStorage.setItem("savedNotes", JSON.stringify(notes));
   };
 
   const deleteNote = (id) => {
-    setNotes(notes.filter((note) => note.id !== id));
+    let newNotes = [...notes];
+    let filteredNotes = newNotes.filter((note) => note.id !== id);
+    setNotes(() => filteredNotes);
+    localStorage.setItem("savedNotes", JSON.stringify(filteredNotes));
   };
+
+  React.useEffect(() => {
+    localStorage.setItem("savedNotes", JSON.stringify(notes));
+    console.log("localNotes:", localNotes);
+  }, [notes, localNotes]);
 
   return (
     <div className="App">
@@ -38,15 +47,25 @@ function App() {
           <FaPlusSquare />
         </button>
       </div>
-      {notes.map((note, i) => (
-        <Notepad
-          key={note.id}
-          id={idGen()}
-          date={note.date}
-          text={note.text}
-          deleteNote={deleteNote}
-        />
-      ))}
+      {localNotes
+        ? localNotes.map((note, i) => (
+            <Notepad
+              key={note.id}
+              id={note.id}
+              date={note.date}
+              text={note.text}
+              deleteNote={deleteNote}
+            />
+          ))
+        : notes.map((note, i) => (
+            <Notepad
+              key={note.id}
+              id={note.id}
+              date={note.date}
+              text={note.text}
+              deleteNote={deleteNote}
+            />
+          ))}
     </div>
   );
 }
