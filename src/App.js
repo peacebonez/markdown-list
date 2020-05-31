@@ -4,12 +4,10 @@ import Notepad from "./Notepad";
 import "./App.css";
 import { FaPlusSquare } from "react-icons/fa";
 
-const dateNow = new Date().toString();
-
 const initNotes = [
   {
     id: 0,
-    date: dateNow,
+    date: new Date().toString(),
     text: "",
   },
 ];
@@ -23,7 +21,10 @@ function App() {
   const localNotes = JSON.parse(localStorage.getItem("savedNotes")) || false;
 
   const addNote = () => {
-    setNotes(() => [...notes, { id: idGen(), date: dateNow, text: "" }]);
+    setNotes(() => [
+      ...notes,
+      { id: idGen(), date: new Date().toString(), text: "" },
+    ]);
     localStorage.setItem("savedNotes", JSON.stringify(notes));
   };
 
